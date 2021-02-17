@@ -80,6 +80,14 @@ def show(id):
     return render_template('show.html', show=show, seasons=seasons)
 
 
+@app.route("/show/<int:show_id>/<int:season_id>")
+def season(show_id, season_id):
+    show = queries.get_show(show_id)
+    season = queries.get_season(season_id)[0]
+    episodes = queries.get_episodes(season_id)
+    return render_template("season.html", show=show, episodes=episodes, season=season)
+
+
 @app.route("/shows/<phrase>")
 def find_show(phrase):
     return jsonify(queries.get_shows_like(str(phrase)))
@@ -126,8 +134,11 @@ def logout():
 
 @app.route("/edit", methods=["GET", "POST"])
 def edit_show():
-    found_shows = queries.get_all_shows_info()
-    return render_template("edit.html", shows=found_shows)
+    if "username" in session:
+        found_shows = queries.get_all_shows_info()
+        return render_template("edit.html", shows=found_shows)
+    else:
+        return redirect(url_for("index"))
 
 
 @app.route("/get_seasons/<id>")

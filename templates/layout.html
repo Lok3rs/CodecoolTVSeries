@@ -18,6 +18,9 @@
     <!-- Normalize.css fixes lot of differences between browsers default styles -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css"/>
 
+    {# Font awesome icons #}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
+
     <!-- project wide styling -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style/site.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style/header.css') }}">
@@ -29,12 +32,14 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style/form.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style/grid.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style/utils.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/season.css') }}">
 
     <!-- page specific styling -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style/pagination.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style/detailed-view.css') }}">
 
     <script src="{{ url_for("static", filename="js/auth.js") }}" type="text/javascript" defer></script>
+    <script src="{{ url_for("static", filename="js/season.js") }}" type="text/javascript" defer></script>
 </head>
 <body>
 <div id="body-wrapper">

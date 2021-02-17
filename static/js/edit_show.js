@@ -78,6 +78,7 @@ const createOptions = (parent, data, type) => {
     })
 }
 
+
 const checkIfUpdated = data => {
     if (data.updated) {
         alert("Episode updated successfully!")

@@ -34,7 +34,7 @@
         <tbody>
             {% for season in seasons %}
             <tr>
-                <td>{{ season.season_number }}</td>
+                <td><a href="{{ url_for("season", show_id=show.id, season_id=season.id) }}">{{ season.season_number }}</a></td>
                 <td>{{ season.title }}</td>
                 <td>{{ season.overview }}</td>
             </tr>

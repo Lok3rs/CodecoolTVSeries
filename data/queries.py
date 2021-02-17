@@ -156,3 +156,23 @@ def update_episode(episode_id, title, overview):
         """, {"title": title, "overview": overview, "id": episode_id}
     )
 
+
+def get_episodes(season_id):
+    return data_manager.execute_select(
+        sql.SQL("""
+        SELECT *
+        FROM episodes
+        WHERE season_id = {}
+        ORDER BY id
+        """.format(season_id))
+    )
+
+
+def get_season(season_id):
+    return data_manager.execute_select(
+        sql.SQL("""
+        SELECT *
+        FROM seasons
+        WHERE id = {}
+        """.format(season_id))
+    )
