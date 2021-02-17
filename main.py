@@ -180,6 +180,21 @@ def update_episode():
         return jsonify(updated=False)
 
 
+@app.route("/add_episode", methods=["POST"])
+def add_episode():
+    try:
+        data = ast.literal_eval(request.data.decode("utf-8"))
+        queries.add_episode(
+            season_id=data.get("season_id"),
+            episode_number=data.get("episode_number"),
+            title=data.get("title"),
+            overview=data.get("overview")
+        )
+        return jsonify(added=True)
+    except:
+        return jsonify(added=False)
+
+
 def main():
     app.run(debug=True)
 

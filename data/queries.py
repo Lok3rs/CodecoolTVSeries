@@ -176,3 +176,14 @@ def get_season(season_id):
         WHERE id = {}
         """.format(season_id))
     )
+
+
+def add_episode(season_id, episode_number, title, overview):
+    return data_manager.execute_dml_statement(
+        """
+        INSERT INTO episodes
+        (title, episode_number, overview, season_id)
+        VALUES 
+        (%(title)s, %(episode_number)s, %(overview)s, %(season_id)s)
+        """, {"title": title, "overview": overview, "episode_number": episode_number, "season_id": season_id}
+    )
