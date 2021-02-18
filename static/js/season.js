@@ -6,7 +6,10 @@ const episodeNumberInput = document.querySelector("#episodeNumber")
 const episodeTitleInput = document.querySelector("#episodeTitle")
 const episodeOverviewInput = document.querySelector("#episodeOverview")
 const episodeSubmitBtn = document.querySelector("#episodeSubmit")
-addEpisodeFormWrapper.style.display = "none"
+const setDisplay = (display, ...elements) => elements.forEach(el => el.style.display = display)
+const clearValue = (...elements) => elements.forEach(el => el.value = "")
+
+setDisplay("none", addEpisodeFormWrapper)
 
 addEpisodeBtn.addEventListener("click", e => {
     setDisplay("block", addEpisodeFormWrapper)
@@ -28,39 +31,55 @@ episodeNumberInput.addEventListener("input", e => {
 
 episodeSubmitBtn.addEventListener("click", e => {
     e.preventDefault()
-    checkTitleLength()
-    fetch("/add_episode", {
-        method: "POST",
-        body: JSON.stringify({
+    if(checkTitleLength())
+        fetchApiPost("/add_episode", {
             season_id: seasonIdHiddenInput.value,
             episode_number: episodeNumberInput.value,
             title: episodeTitleInput.value,
             overview: episodeOverviewInput.value
-        })
-    })
-        .then(res => res.json())
-        .then(data => {
-            const episodesList = document.querySelector(".episodes-list")
-            if (data.added) {
-                let newEpisodeLi = document.createElement("li")
-                let newEpisodeA = document.createElement("a")
-                newEpisodeA.setAttribute("href", "#")
-                newEpisodeLi.appendChild(newEpisodeA)
-                episodesList.appendChild(newEpisodeLi)
-            }
-        })
+        }, addNewEpisodeToList)
 })
-
-
-const setDisplay = (display, ...elements) => elements.forEach(el => el.style.display = display)
 
 
 const checkTitleLength = () => {
     const titleErrorContainer = document.querySelector("#episodeTitleErrors")
     const minTitleLength = 5
 
-    if (episodeTitleInput.value.length < minTitleLength)
+    if (episodeTitleInput.value.length < minTitleLength) {
         titleErrorContainer.innerHTML = "Too short, at least 5 characters"
-    else
+        return false
+    }
+    else {
         titleErrorContainer.innerHTML = ''
+        return true
+    }
 }
+
+const addNewEpisodeToList = data => {
+    const episodesList = document.querySelector(".episodes-list")
+    if (data.added) {
+        let newEpisodeLi = document.createElement("li")
+        let newEpisodeA = document.createElement("a")
+        newEpisodeA.setAttribute("href", "#")
+        newEpisodeA.textContent = episodeTitleInput.value
+        newEpisodeLi.appendChild(newEpisodeA)
+        episodesList.appendChild(newEpisodeLi)
+        setDisplay("block", addEpisodeBtn)
+        clearValue(episodeNumberInput, episodeTitleInput, episodeOverviewInput)
+        setDisplay("none", addEpisodeFormWrapper)
+    } else {
+        alert("Something went wrong while adding!")
+    }
+}
+
+const fetchApiPost = (url, body, callback) => {
+    fetch(url, {
+        method: "POST",
+        body: JSON.stringify(body)
+    })
+        .then(res => res.json())
+        .then(data => callback(data))
+        .catch(err => console.log(err))
+}
+
+

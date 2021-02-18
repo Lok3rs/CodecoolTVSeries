@@ -195,6 +195,14 @@ def add_episode():
         return jsonify(added=False)
 
 
+@app.route("/show/<int:show_id>/<int:season_id>/<int:episode_id>")
+def show_episode(show_id, season_id, episode_id):
+    show = queries.get_show(show_id)
+    season = queries.get_season(season_id)[0]
+    episode = queries.get_episode_details(episode_id)
+
+    return render_template("episode.html", show=show, season=season, episode=episode)
+
 def main():
     app.run(debug=True)
 

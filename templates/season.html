@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    working
+    {{ show.title }} - {{ season.title }}
 {% endblock %}
 
 {% block content %}
@@ -23,11 +23,11 @@
         <h5>Episodes:</h5>
         <ul class="episodes-list">
             {% for episode in episodes %}
-                <li><a href="#">{{ episode.title }}</a></li>
+                <li><a href="{{ url_for("show_episode", season_id=season.id, show_id=show.id, episode_id=episode.id) }}">{{ episode.title }}</a></li>
             {% endfor %}
-            <i class="fas fa-plus-circle add-icon"></i>
-
-            <div id="addEpisodeFormWrapper">
+        </ul>
+        <i class="fas fa-plus-circle add-icon"></i>
+        <div id="addEpisodeFormWrapper">
                 <button id="closeAddEpisodeBtn">&times;</button>
                 <form action="">
                     <input type="hidden" value="{{ season.id }}" id="seasonNumber">
@@ -51,8 +51,6 @@
                     </p>
                 </form>
             </div>
-        </ul>
-
     </div>
 
 {% endblock %}
