@@ -203,6 +203,21 @@ def show_episode(show_id, season_id, episode_id):
 
     return render_template("episode.html", show=show, season=season, episode=episode)
 
+
+@app.route("/add_new_season", methods=["POST"])
+def add_season():
+    try:
+        data = ast.literal_eval(request.data.decode("utf-8"))
+        queries.add_season(
+            season_number=data.get("season_number"),
+            show_id=data.get("show_id"),
+            title=data.get("title"),
+            overview=data.get("overview")
+        )
+        return jsonify(added=True)
+    except:
+        return jsonify(added=False)
+
 def main():
     app.run(debug=True)
 

@@ -187,3 +187,15 @@ def add_episode(season_id, episode_number, title, overview):
         (%(title)s, %(episode_number)s, %(overview)s, %(season_id)s)
         """, {"title": title, "overview": overview, "episode_number": episode_number, "season_id": season_id}
     )
+
+
+def add_season(season_number, title, overview, show_id):
+    return data_manager.execute_dml_statement(
+        """
+        INSERT INTO seasons
+        (season_number, title, overview, show_id) 
+        VALUES 
+        (%(season_number)s, %(title)s, %(overview)s, %(show_id)s)
+        """,
+        {"season_number": season_number, "title": title, "overview": overview, "show_id": show_id}
+    )
