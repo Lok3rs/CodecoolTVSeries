@@ -156,3 +156,46 @@ def update_episode(episode_id, title, overview):
         """, {"title": title, "overview": overview, "id": episode_id}
     )
 
+
+def get_episodes(season_id):
+    return data_manager.execute_select(
+        sql.SQL("""
+        SELECT *
+        FROM episodes
+        WHERE season_id = {}
+        ORDER BY id
+        """.format(season_id))
+    )
+
+
+def get_season(season_id):
+    return data_manager.execute_select(
+        sql.SQL("""
+        SELECT *
+        FROM seasons
+        WHERE id = {}
+        """.format(season_id))
+    )
+
+
+def add_episode(season_id, episode_number, title, overview):
+    return data_manager.execute_dml_statement(
+        """
+        INSERT INTO episodes
+        (title, episode_number, overview, season_id)
+        VALUES 
+        (%(title)s, %(episode_number)s, %(overview)s, %(season_id)s)
+        """, {"title": title, "overview": overview, "episode_number": episode_number, "season_id": season_id}
+    )
+
+
+def add_season(season_number, title, overview, show_id):
+    return data_manager.execute_dml_statement(
+        """
+        INSERT INTO seasons
+        (season_number, title, overview, show_id) 
+        VALUES 
+        (%(season_number)s, %(title)s, %(overview)s, %(show_id)s)
+        """,
+        {"season_number": season_number, "title": title, "overview": overview, "show_id": show_id}
+    )

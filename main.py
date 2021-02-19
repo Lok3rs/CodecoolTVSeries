@@ -80,6 +80,14 @@ def show(id):
     return render_template('show.html', show=show, seasons=seasons)
 
 
+@app.route("/show/<int:show_id>/<int:season_id>")
+def season(show_id, season_id):
+    show = queries.get_show(show_id)
+    season = queries.get_season(season_id)[0]
+    episodes = queries.get_episodes(season_id)
+    return render_template("season.html", show=show, episodes=episodes, season=season)
+
+
 @app.route("/shows/<phrase>")
 def find_show(phrase):
     return jsonify(queries.get_shows_like(str(phrase)))
@@ -126,8 +134,11 @@ def logout():
 
 @app.route("/edit", methods=["GET", "POST"])
 def edit_show():
-    found_shows = queries.get_all_shows_info()
-    return render_template("edit.html", shows=found_shows)
+    if "username" in session:
+        found_shows = queries.get_all_shows_info()
+        return render_template("edit.html", shows=found_shows)
+    else:
+        return redirect(url_for("index"))
 
 
 @app.route("/get_seasons/<id>")
@@ -168,6 +179,44 @@ def update_episode():
     except:
         return jsonify(updated=False)
 
+
+@app.route("/add_episode", methods=["POST"])
+def add_episode():
+    try:
+        data = ast.literal_eval(request.data.decode("utf-8"))
+        queries.add_episode(
+            season_id=data.get("season_id"),
+            episode_number=data.get("episode_number"),
+            title=data.get("title"),
+            overview=data.get("overview")
+        )
+        return jsonify(added=True)
+    except:
+        return jsonify(added=False)
+
+
+@app.route("/show/<int:show_id>/<int:season_id>/<int:episode_id>")
+def show_episode(show_id, season_id, episode_id):
+    show = queries.get_show(show_id)
+    season = queries.get_season(season_id)[0]
+    episode = queries.get_episode_details(episode_id)
+
+    return render_template("episode.html", show=show, season=season, episode=episode)
+
+
+@app.route("/add_new_season", methods=["POST"])
+def add_season():
+    try:
+        data = ast.literal_eval(request.data.decode("utf-8"))
+        queries.add_season(
+            season_number=data.get("season_number"),
+            show_id=data.get("show_id"),
+            title=data.get("title"),
+            overview=data.get("overview")
+        )
+        return jsonify(added=True)
+    except:
+        return jsonify(added=False)
 
 def main():
     app.run(debug=True)

@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-    <script src="{{ url_for("static", filename="js/edit_show.js") }}" defer></script>
+    <script src="{{ url_for("static", filename="js/edit_show.js") }}" type="module" defer></script>
 
     <div class="card">
         <form action="">
@@ -27,7 +27,7 @@
             </p>
             <p class="form-element">
                 <label for="episode" class="form-element-label">Episode: </label>
-                <select type="number" name="episode" disabled id="showEpisode" style="min-width: 50px;">
+                <select name="episode" disabled id="showEpisode" style="min-width: 50px;">
                     <option disabled selected value> -- Select Episode -- </option>
                 </select>
             </p>
