@@ -1,3 +1,6 @@
+import {fetchApiPost} from "./data_manager.js";
+import {setDisplay, clearValue, clearInnerHtml} from "./utils.js";
+
 const addEpisodeBtn = document.querySelector(".add-icon")
 const addEpisodeFormWrapper = document.querySelector("#addEpisodeFormWrapper")
 const closeAddEpisodeBtn = document.querySelector("#closeAddEpisodeBtn")
@@ -6,12 +9,9 @@ const episodeNumberInput = document.querySelector("#episodeNumber")
 const episodeTitleInput = document.querySelector("#episodeTitle")
 const episodeOverviewInput = document.querySelector("#episodeOverview")
 const episodeSubmitBtn = document.querySelector("#episodeSubmit")
-const setDisplay = (display, ...elements) => elements.forEach(el => el.style.display = display)
-const clearValue = (...elements) => elements.forEach(el => el.value = "")
-
 setDisplay("none", addEpisodeFormWrapper)
 
-addEpisodeBtn.addEventListener("click", e => {
+addEpisodeBtn.addEventListener("click", () => {
     setDisplay("block", addEpisodeFormWrapper)
     setDisplay("none", addEpisodeBtn)
 })
@@ -50,7 +50,7 @@ const checkTitleLength = () => {
         return false
     }
     else {
-        titleErrorContainer.innerHTML = ''
+        clearInnerHtml(titleErrorContainer)
         return true
     }
 }
@@ -72,14 +72,5 @@ const addNewEpisodeToList = data => {
     }
 }
 
-const fetchApiPost = (url, body, callback) => {
-    fetch(url, {
-        method: "POST",
-        body: JSON.stringify(body)
-    })
-        .then(res => res.json())
-        .then(data => callback(data))
-        .catch(err => console.log(err))
-}
 
 
