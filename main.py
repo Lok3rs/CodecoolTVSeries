@@ -61,7 +61,7 @@ def shows(page_number=1, order_by="rating", order="DESC"):
 @app.route('/show/<int:id>/')
 def show(id):
     show = queries.get_show(id)
-    characters = queries.get_show_characters(id, 3)
+    characters = queries.get_show_characters(id)
     seasons = queries.get_show_seasons(id)
 
     # format character names
@@ -217,6 +217,34 @@ def add_season():
         return jsonify(added=True)
     except:
         return jsonify(added=False)
+
+
+@app.route("/show/<int:show_id>/actors")
+def show_actors(show_id):
+    show = queries.get_show(show_id)
+    actors = queries.get_show_characters(show_id)
+
+    return render_template("actors.html", actors=actors, show=show)
+
+
+@app.route("/edit_actor/<int:actor_id>", methods=["GET", "POST"])
+def edit_actor(actor_id):
+    if not "username" in session:
+        return redirect(url_for("index"))
+    if request.method == "GET":
+        character = queries.get_character(actor_id)
+        actor_id_from_character = character.get("actor_id")
+        actor = queries.get_actor(actor_id_from_character)
+
+        return render_template("edit_actor.html", actor=actor)
+    else:
+        try:
+            data = ast.literal_eval(request.data.decode("utf-8"))
+            queries.change_actor(data.get("actor_id"), data.get("actor_name"))
+            return jsonify(changed=True)
+        except:
+            return jsonify(changed=False)
+
 
 def main():
     app.run(debug=True)

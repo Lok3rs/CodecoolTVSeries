@@ -69,15 +69,14 @@ def get_show(id):
     """, {"id": id}, False)
 
 
-def get_show_characters(id, limit=3):
+def get_show_characters(show_id):
     return data_manager.execute_select("""
-        SELECT sc.id, character_name, name, birthday, death, biography
+        SELECT character_name, name, birthday, death, biography, a.id
         FROM actors a
         JOIN show_characters sc on a.id = sc.actor_id
-        WHERE show_id = %(id)s
-        ORDER BY id
-        LIMIT %(limit)s
-    """, {"id": id, "limit": limit})
+        WHERE show_id = %(show_id)s
+        ORDER BY a.id
+    """, {"show_id": show_id})
 
 
 def get_show_seasons(id):
@@ -198,4 +197,34 @@ def add_season(season_number, title, overview, show_id):
         (%(season_number)s, %(title)s, %(overview)s, %(show_id)s)
         """,
         {"season_number": season_number, "title": title, "overview": overview, "show_id": show_id}
+    )
+
+
+def get_character(actor_id):
+    return data_manager.execute_select(
+        """
+            SELECT * 
+            FROM show_characters
+            WHERE show_characters.actor_id=%(actor_id)s
+            
+        """, {"actor_id": actor_id}, fetchall=False)
+
+
+def get_actor(actor_id):
+    return data_manager.execute_select(
+        """
+        SELECT *
+        FROM actors
+        WHERE id=%(actor_id)s
+        """, {"actor_id": actor_id}, fetchall=False
+    )
+
+
+def change_actor(actor_id, new_name):
+    return data_manager.execute_dml_statement(
+        """
+        UPDATE actors
+        SET name = %(new_name)s
+        WHERE actors.id = %(actor_id)s
+        """, {"actor_id": actor_id, "new_name": new_name}
     )

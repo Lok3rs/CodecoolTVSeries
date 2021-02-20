@@ -19,6 +19,7 @@
                 <p><b>Stars:</b>&nbsp;
                     {{ show.characters_str }}
                 </p>
+                <a href="{{ url_for("show_actors", show_id=show.id) }}">Actors list</a>
             </div>
             <div {% if show.trailer %} id="player" {% endif %} class="trailer col col-third"></div>
         </div>
